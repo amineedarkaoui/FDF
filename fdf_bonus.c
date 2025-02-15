@@ -99,30 +99,39 @@ void	perspective(t_map map)
 int	animate_map(t_vars *v)
 {
 	int	i;
-	//int	sleep_flag = 0;
+	int	sleep_flag = 0;
+	int	miny = 0;
+	int maxy = 0;
 
-	// printf("%d, %d\n", v->v0[41].yf, v->v0[41].y);
-	// printf("%d, %d\n===========\n", v->map.v[41].yf, v->map.v[41].y);
 	ft_bzero(v->img.addr, v->img.ll * W_H);
 	i = 0;
 	while (i < v->map.w * v->map.h)
 	{
-		if (v->v0[i].y < v->map.v[i].yf)
+		miny = min_int(miny, v->v0[i].yf);
+		maxy = max_int(maxy, v->v0[i].yf);
+		i++;
+	}
+	i = 0;
+	while (i < v->map.w * v->map.h)
+	{
+		if (v->v0[i].y < v->v0[i].yf)
 		{
-			// printf("1------\n");
-			v->v0[i].y++;
-			//sleep_flag = 1;
+
+			v->v0[i].y += max_int(maxy / 100, 1);
+			v->v0[i].y = min_int(v->v0[i].y, v->v0[i].yf);
+			sleep_flag = 1;
 		}
-		else if (v->v0[i].y > v->map.v[i].yf)
+		else if (v->v0[i].y > v->v0[i].yf)
 		{
-			// printf("2-----\n");
-			v->v0[i].y--;
-			//sleep_flag = 1;
+			v->v0[i].y += min_int(miny / 100, -1);
+			v->v0[i].y = max_int(v->v0[i].y, v->v0[i].yf);
+			sleep_flag = 1;
 		}
 		i++;
 	}
-	// if (sleep_flag)
-	// 	usleep(log(log(log(max_int(get_array_max(v->v0, v->map).yf, abs(get_array_min(v->v0, v->map).yf))))) * 1000);
+	if (sleep_flag)
+		usleep(5000);
+	printf("y: %d, yf: %d\n", v->v0[40].y, v->v0[40].yf);
 	rotate_y(*v, v->angles.y);
 	rotate_x(*v, v->angles.x);
 	rotate_z(*v, v->angles.z);

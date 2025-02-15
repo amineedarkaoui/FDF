@@ -13,21 +13,30 @@ HDRS = fdf.h fdf_bonus.h
 MLX_PATH = /usr/include/minilibx-linux
 MLX_LIB = -L$(MLX_PATH) -lmlx
 MLX_INC = -I$(MLX_PATH)
+INCLUDE = -L/usr/include
 
 .PHONY: clean fclean re all
+
+#####################################
+CUBE = cube3d.c
+CUBE_OBJ = cube3d.o
+
+cube: $(CUBE_OBJ)
+	$(CC) $(CUBE_OBJ) $(MLX_LIB) $(INCLUDE) -lXext -lX11 -lm -lz -o $(NAME)
+#####################################
 
 all: $(NAME)
 
 super_bonus: $(SPR_BNS_OBJS) $(HELPER_OBJS)
 	touch super_bonus
-	$(CC) $(SPR_BNS_OBJS) $(HELPER_OBJS) $(MLX_LIB) -lXext -lX11 -lm -lz -o $(NAME)
+	$(CC) $(SPR_BNS_OBJS) $(HELPER_OBJS) $(MLX_LIB) $(INCLUDE) -lXext -lX11 -lm -lz -o $(NAME)
 
 bonus: $(BNS_OBJS) $(HELPER_OBJS)
 	touch bonus
-	$(CC) $(BNS_OBJS) $(HELPER_OBJS) $(MLX_LIB) -lXext -lX11 -lm -lz -o $(NAME)
+	$(CC) $(BNS_OBJS) $(HELPER_OBJS) $(MLX_LIB) $(INCLUDE) -lXext -lX11 -lm -lz -o $(NAME)
 
 $(NAME): $(OBJS) $(HELPER_OBJS)
-	$(CC) $(OBJS) $(HELPER_OBJS) $(MLX_LIB) -lXext -lX11 -lm -lz -o $(NAME)
+	$(CC) $(OBJS) $(HELPER_OBJS) $(MLX_LIB) $(INCLUDE) -lXext -lX11 -lm -lz -o $(NAME)
 
 %.o: %.c $(HDRS)
 	$(CC) $(FLAGS) $(MLX_INC) -Imlx_linux -O3 -c $< -o $@

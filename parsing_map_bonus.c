@@ -81,24 +81,13 @@ int	fill_pixel(t_map *map, char *row, int i, int j)
 void	color_map(t_map *map)
 {
 	int	i;
-	int	max;
-	int	min;
 
 	i = 0;
-	min = 0;
-	max = 0;
 	while (i < map->w * map->h)
 	{
-		min = min_int(min, map->v[i].y);
-		max = max_int(max, map->v[i].y);
-		i++;
-	}
-	i = 0;
-	while (i < map->w * map->h)
-	{
-		if (map->v[i].y == 0)
+		if (map->v[i].yf == 0)
 			map->v[i].c = 0xffffff;
-		else if (map->v[i].y < 0)
+		else if (map->v[i].yf < 0)
 			map->v[i].c = MAX_COLOR;
 		else
 			map->v[i].c = MIN_COLOR;

@@ -54,9 +54,9 @@ int	key_hook(int keycode, t_vars *v)
 	if (keycode == 97)
 		v->t.x -= 10;
 	if (keycode == 91)
-		change_z(v, -10);
+		change_z(v, -1000);
 	if (keycode == 93)
-		change_z(v, 10);;
+		change_z(v, 1000);
 	return (0);
 }
 
