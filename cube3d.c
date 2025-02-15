@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
+#include <stdio.h>
 
 #define W_W 1920
 #define W_H 1020
@@ -197,11 +198,13 @@ t_point	get_cube_min(t_point cube[8])
 
 	min.x = cube[0].x;
 	min.y = cube[0].y;
+	min.z = cube[0].z;
 	i = 0;
 	while (i < 8)
 	{
 		min.x = min_int(min.x, cube[i].x);
 		min.y = min_int(min.y, cube[i].y);
+		min.z = min_int(min.z, cube[i].z);
 		i++;
 	}
 	return (min);
@@ -214,11 +217,13 @@ t_point	get_cube_max(t_point cube[8])
 
 	max.x = cube[0].x;
 	max.y = cube[0].y;
+	max.z = cube[0].z;
 	i = 0;
 	while (i < 8)
 	{
 		max.x = max_int(max.x, cube[i].x);
 		max.y = max_int(max.y, cube[i].y);
+		max.z = max_int(max.z, cube[i].z);
 		i++;
 	}
 	return (max);
@@ -231,10 +236,10 @@ t_point	get_cube_center(t_point cube[8])
 
 	min = get_cube_min(cube);
 	max = get_cube_max(cube);
-	return ((t_point){(max.x + min.x) / 2, (max.y + min.y) / 2, 0, 0, 0});
+	return ((t_point){(max.x + min.x) / 2, (max.y + min.y) / 2, 0, (max.z + min.z) / 2, 0});
 }
 
-void	translate_cube(t_point cube[8], int x, int y)
+void	translate_cube(t_point cube[8], int x, int y, int z)
 {
 	int	i;
 
@@ -243,6 +248,7 @@ void	translate_cube(t_point cube[8], int x, int y)
 	{
 		cube[i].x += x;
 		cube[i].y += y;
+		cube[i].z += z;
 		i++;
 	}
 }
@@ -252,17 +258,19 @@ void	translate_center(t_point cube[8])
 	t_point	center;
 
 	center = get_cube_center(cube);
-	translate_cube(cube, W_W / 2 - center.x, W_H / 2 - center.y);
+	translate_cube(cube, W_W / 2 - center.x, W_H / 2 - center.y, 0);
 }
 
 void perspective(t_point cube[8])
 {
+	double	angle = 3.14 / 150.0;
+	double	f = 1 / tan(angle / 2);
 	for (int i = 0; i < 8; i++)
 	{
-		if (cube[i].z != 0)
+		if (cube[i].z >= f)
 		{
-			cube[i].x /= cube[i].z * 0.001;
-			cube[i].y /= cube[i].z * 0.001;
+			cube[i].x = (double)(cube[i].x * f) / cube[i].z;
+			cube[i].y = (double)(cube[i].y * f) / cube[i].z;
 		}
 	}
 }
@@ -310,17 +318,24 @@ int	animate_cube(t_vars *v)
 	t_point new_cube[8];
 	for (int i = 0; i < 8; i++)
 		new_cube[i] = v->cube[i];
+	t_point cube_center = get_cube_center(new_cube);
+	translate_cube(new_cube, -cube_center.x, -cube_center.y, -cube_center.z);
 	rotate_y(new_cube, v->angles.y);
 	rotate_x(new_cube, v->angles.x);
 	rotate_z(new_cube, v->angles.z);
+	translate_cube(new_cube, cube_center.x, cube_center.y, cube_center.z);
+	translate_cube(new_cube, -cube_center.x, -cube_center.y, 0);
+	//dynamic_scale(v);
+	// for (int i = 0; i < 8; i++)
+	// 	printf("x = %d, y = %d, z = %d\n",new_cube[i].x, new_cube[i].y, new_cube[i].z);
+	// printf("===================\n");
 	perspective(new_cube);
-	dynamic_scale(v);
-	translate_center(new_cube);
-	//translate_map(v->map, v->t.x, v->t.y);
+	translate_cube(new_cube, 950, 500, 0);
+	//translate_center(new_cube);
 	draw_cube(&v->img, new_cube);
 	mlx_put_image_to_window(v->mlx, v->mlx_win, v->img.img, 0, 0);
-	v->angles.y += 0.005;
-	v->angles.x += 0.001;
+	v->angles.y -= 0.001;
+	//v->angles.x += 0.0005;
 	//usleep(100000);
 	return (0);
 }
@@ -342,15 +357,18 @@ void	display_cube(t_point cube[8])
 int main()
 {
 	t_point cube[8];
+	int		d = 0;
+	int		v = 1000;
+	int		z = 400;
 
-	cube[0] = (t_point){0, 0, 0, 0, 0xFF0000};
-	cube[1] = (t_point){0, 0, 0, 6000, 0xFF0000};
-	cube[2] = (t_point){6000, 0, 0, 6000, 0xFF0000};
-	cube[3] = (t_point){6000, 0, 0, 0, 0xFF0000};
-	cube[4] = (t_point){0, 6000, 0, 0, 0xFF0000};
-	cube[5] = (t_point){0, 6000, 0, 6000, 0xFF0000};
-	cube[6] = (t_point){6000, 6000, 0, 6000, 0xFF0000};
-	cube[7] = (t_point){6000, 6000, 0, 0, 0xFF0000};
+	cube[0] = (t_point){d+0, d+0, 0, d+0+z, 0xFF0000};
+	cube[1] = (t_point){d+0, d+0, 0, d+v+z, 0xFF0000};
+	cube[2] = (t_point){d+v, d+0, 0, d+v+z, 0xFF0000};
+	cube[3] = (t_point){d+v, d+0, 0, d+0+z, 0xFF0000};
+	cube[4] = (t_point){d+0, d+v, 0, d+0+z, 0xFF0000};
+	cube[5] = (t_point){d+0, d+v, 0, d+v+z, 0xFF0000};
+	cube[6] = (t_point){d+v, d+v, 0, d+v+z, 0xFF0000};
+	cube[7] = (t_point){d+v, d+v, 0, d+0+z, 0xFF0000};
 	display_cube(cube);
 
 	return 0;
