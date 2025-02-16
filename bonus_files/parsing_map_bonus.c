@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:53:18 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/01 11:35:52 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/02/15 22:05:42 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	count_map(char *filename, t_map *map)
 		vars.gnl = get_next_line(vars.fd);
 		if (!vars.gnl)
 			break ;
-		vars.count = count_words(vars.gnl, ' ');
+		vars.count = count_words(vars.gnl, " \n");
 		if (map->h > 0 && vars.count != map->w)
 			vars.is_colored = 1;
 		map->w = vars.count;
@@ -99,6 +99,10 @@ void	read_map(char *filename, t_map *map)
 {
 	t_read_vars	v;
 
+	v.row = ft_split(filename, '.');
+	if (ft_strncmp(v.row[1], "fdf", 3))
+		exit(1);
+	free_split(&v.row);
 	count_map(filename, map);
 	v.fd = open(filename, O_RDONLY);
 	map->v = malloc(map->h * map->w * sizeof(t_point));

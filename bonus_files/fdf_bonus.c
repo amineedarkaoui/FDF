@@ -6,36 +6,36 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:44:28 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/01 17:12:14 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:50:47 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
-void	draw_map(t_img *img, t_map m)
+void	draw_map(t_vars v)
 {
 	int	x;
 	int	y;
 
-	if (m.w == 1 && m.h == 1)
-		my_pixel_put(img, m.v[0].x, m.v[0].y, m.v->c);
+	if (v.map.w == 1 && v.map.h == 1)
+		my_pixel_put(&v.img, v.v0[0].x, v.v0[0].y, v.v0->c);
 	x = -1;
-	while (++x < m.w)
+	while (++x < v.map.w)
 	{
 		y = -1;
-		while (++y < m.h)
+		while (++y < v.map.h)
 		{
-			if (y < m.h - 1 && x < m.w - 1)
+			if (y < v.map.h - 1 && x < v.map.w - 1)
 			{
-				draw_l(img, m.v[y * m.w + x], m.v[y * m.w + x + 1]);
-				draw_l(img, m.v[y * m.w + x], m.v[(y + 1) * m.w + x]);
+				draw_l(&v.img, v.v0[y * v.map.w + x], v.v0[y * v.map.w + x + 1]);
+				draw_l(&v.img, v.v0[y * v.map.w + x], v.v0[(y + 1) * v.map.w + x]);
 			}
-			else if (y < m.h - 1 || x < m.w - 1)
+			else if (y < v.map.h - 1 || x < v.map.w - 1)
 			{
-				if (x == m.w - 1)
-					draw_l(img, m.v[y * m.w + x], m.v[(y + 1) * m.w + x]);
-				if (y == m.h - 1)
-					draw_l(img, m.v[y * m.w + x], m.v[y * m.w + x + 1]);
+				if (x == v.map.w - 1)
+					draw_l(&v.img, v.v0[y * v.map.w + x], v.v0[(y + 1) * v.map.w + x]);
+				if (y == v.map.h - 1)
+					draw_l(&v.img, v.v0[y * v.map.w + x], v.v0[y * v.map.w + x + 1]);
 			}
 		}
 	}
@@ -45,7 +45,6 @@ void	clean_n_quit(t_vars *vars)
 {
 	free(vars->map.v);
 	free(vars->v0);
-	free(vars->v1);
 	if (vars->img.img)
 		mlx_destroy_image(vars->mlx, vars->img.img);
 	if (vars->mlx_win)
@@ -58,39 +57,23 @@ void	clean_n_quit(t_vars *vars)
 	exit(0);
 }
 
-void	perspective(t_map map)
+void	perspective(t_vars v)
 {
-	int	i;
-	//int	min;
+	int		i = 0;
+	double	a = 280 / v.map.scale0;
+	int		z;
+	int		min = get_map_min(v).z;
 
-	// min = map.v[0].z;
-	// i = 0;
-	// while (i < map.w * map.h)
-	// {
-	// 	min = min_int(min, map.v[i].z);
-	// 	i++;
-	// }
-	// if (min <= 0)
-	// {
-	// 	i = 0;
-	// 	while (i < map.w * map.h)
-	// 	{
-	// 		map.v[i].z += abs(min) + 100;
-	// 		i++;
-	// 	}
-	// }
-	i = 0;
-	while (i < map.w * map.h)
+	while (i < v.map.w * v.map.h)
 	{
-		if (map.v[i].z != 0)
-		{
-			map.v[i].x = (map.v[i].x * 0.00000001) / map.v[i].z;
-			map.v[i].y = (map.v[i].y * 0.00000001) / map.v[i].z;
-		}
+		if (min <= 0)
+			z = v.v0[i].z + 1 + abs(get_map_min(v).z);
 		else
+			z = v.v0[i].z;
+		if (v.v0[i].z != 0)
 		{
-			map.v[i].x = map.v[i].x / 0.1;
-			map.v[i].y = map.v[i].y / 0.1;
+			v.v0[i].x = (double)(v.v0[i].x * a) / z;
+			v.v0[i].y = (double)(v.v0[i].y * a) / z;
 		}
 		i++;
 	}
@@ -102,6 +85,7 @@ int	animate_map(t_vars *v)
 	int	sleep_flag = 0;
 	int	miny = 0;
 	int maxy = 0;
+	t_point	map_center;
 
 	ft_bzero(v->img.addr, v->img.ll * W_H);
 	i = 0;
@@ -114,33 +98,38 @@ int	animate_map(t_vars *v)
 	i = 0;
 	while (i < v->map.w * v->map.h)
 	{
-		if (v->v0[i].y < v->v0[i].yf)
+		if (v->map.v[i].y < v->map.v[i].yf)
 		{
 
-			v->v0[i].y += max_int(maxy / 100, 1);
-			v->v0[i].y = min_int(v->v0[i].y, v->v0[i].yf);
+			v->map.v[i].y += max_int(maxy / 100, 1);
+			v->map.v[i].y = min_int(v->map.v[i].y, v->map.v[i].yf);
 			sleep_flag = 1;
 		}
-		else if (v->v0[i].y > v->v0[i].yf)
+		else if (v->map.v[i].y > v->map.v[i].yf)
 		{
-			v->v0[i].y += min_int(miny / 100, -1);
-			v->v0[i].y = max_int(v->v0[i].y, v->v0[i].yf);
+			v->map.v[i].y += min_int(miny / 100, -1);
+			v->map.v[i].y = max_int(v->map.v[i].y, v->map.v[i].yf);
 			sleep_flag = 1;
 		}
 		i++;
 	}
 	if (sleep_flag)
-		usleep(5000);
-	printf("y: %d, yf: %d\n", v->v0[40].y, v->v0[40].yf);
+		usleep(10000);
+	copy_array(v->map.v, v->map.w * v->map.h, v->v0);
+	map_center = get_map_center(*v);
+
+	translate_map(*v, -map_center.x, -map_center.yf, -map_center.yf, -map_center.z);
 	rotate_y(*v, v->angles.y);
 	rotate_x(*v, v->angles.x);
 	rotate_z(*v, v->angles.z);
-	copy_array(v->map.v, v->map.h * v->map.w, v->v1);
-	//perspective(v->map);
+	translate_map(*v, map_center.x, map_center.yf, map_center.yf, map_center.z);
+	translate_map(*v, -map_center.x, -map_center.yf, -map_center.yf, 0);
+	if (v->perspective % 2 == 1)
+		perspective(*v);
 	dynamic_scale(v);
 	translate_center(*v);
-	translate_map(v->map, v->t.x, v->t.y);
-	draw_map(&v->img, v->map);
+	translate_map(*v, v->t.x, v->t.y, v->t.y, 0);
+	draw_map(*v);
 	mlx_put_image_to_window(v->mlx, v->mlx_win, v->img.img, 0, 0);
 	return (0);
 }
@@ -149,11 +138,10 @@ void	display_map(t_map map)
 {
 	t_vars	v;
 
+	v.perspective = 0;
 	v.s_flag = 0;
 	v.t = (t_point){0, 0, 0, 0, 0};
 	v.v0 = malloc(map.h * map.w * sizeof(t_point));
-	v.v1 = malloc(map.h * map.w * sizeof(t_point));
-	copy_array(map.v, map.w * map.h, v.v0);
 	v.angles = (t_angles){0.615472907, 0.785398, 0};
 	v.map = map;
 	v.mlx = mlx_init();

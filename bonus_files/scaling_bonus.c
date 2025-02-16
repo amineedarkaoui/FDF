@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:04:25 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/01 13:34:40 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/02/16 11:29:24 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	scale_map(t_vars *v)
 	i = 0;
 	while (i < v->map.w * v->map.h)
 	{
-		v->map.v[i].x = (v->map.scale0 + v->map.scale) * v->v1[i].x;
-		v->map.v[i].y = (v->map.scale0 + v->map.scale) * v->v1[i].y;
-		v->map.v[i].z = (v->map.scale0 + v->map.scale) * v->v1[i].z;
+		v->v0[i].x = (v->map.scale0 + v->map.scale) * v->v0[i].x;
+		v->v0[i].y = (v->map.scale0 + v->map.scale) * v->v0[i].y;
+		v->v0[i].z = (v->map.scale0 + v->map.scale) * v->v0[i].z;
 		i++;
 	}
 }
@@ -81,11 +81,11 @@ void	dynamic_scale(t_vars *v)
 
 	if (!v->s_flag)
 	{
-		min = get_array_min(v->v1, v->map);
-		max = get_array_max(v->v1, v->map);
+		min = get_array_min(v->v0, v->map);
+		max = get_array_max(v->v0, v->map);
 		dx = max.x - min.x;
-		dy = max.y - min.y;
-		v->map.scale0 = min_double((0.9 * W_W) / dx, (0.9 * W_H) / dy);
+		dy = max.yf - min.yf;
+		v->map.scale0 = min_double((0.8 * W_W) / dx, (0.8 * W_H) / dy);
 		if (v->map.w == 1 && v->map.h == 1)
 			v->map.scale0 = 1;
 		v->s_flag = 1;

@@ -326,9 +326,6 @@ int	animate_cube(t_vars *v)
 	translate_cube(new_cube, cube_center.x, cube_center.y, cube_center.z);
 	translate_cube(new_cube, -cube_center.x, -cube_center.y, 0);
 	//dynamic_scale(v);
-	// for (int i = 0; i < 8; i++)
-	// 	printf("x = %d, y = %d, z = %d\n",new_cube[i].x, new_cube[i].y, new_cube[i].z);
-	// printf("===================\n");
 	perspective(new_cube);
 	translate_cube(new_cube, 950, 500, 0);
 	//translate_center(new_cube);

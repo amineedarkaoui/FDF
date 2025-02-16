@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:44:40 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/01 16:47:57 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:27:19 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 # include <mlx.h>
 # include <stdio.h>
 # include <math.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
-# define W_W 1920
+# define W_W 1920 / 2
 # define W_H 1020
-# define SCALE 5
 # define MAX_COLOR	0xff4400
 # define MIN_COLOR	0x00a2ff
 
@@ -72,10 +71,10 @@ typedef struct s_vars
 	t_map		map;
 	t_angles	angles;
 	t_point		*v0;
-	t_point		*v1;
 	t_point		t;
 	int			s_flag;
 	double		offset;
+	int			perspective;
 }	t_vars;
 
 typedef struct s_read_vars
@@ -91,7 +90,7 @@ typedef struct s_read_vars
 
 void	read_map(char *filename, t_map *map);
 void	translate_center(t_vars v);
-void	translate_map(t_map map, int x, int y);
+void	translate_map(t_vars v, int x, int y, int yf, int z);
 void	rotate_x(t_vars v, double angle);
 void	rotate_y(t_vars v, double angle);
 void	rotate_z(t_vars v, double angle);
@@ -104,8 +103,8 @@ void	get_color_distance(int color1, int color2, int distance[3]);
 void	isometric(t_map map);
 void	scale_map(t_vars *v);
 t_point	get_map_center(t_vars v);
-t_point	get_map_min(t_map map);
-t_point	get_map_max(t_map map);
+t_point	get_map_min(t_vars v);
+t_point	get_map_max(t_vars v);
 t_point	get_array_min(t_point *v, t_map map);
 t_point	get_array_max(t_point *v, t_map map);
 void	dynamic_scale(t_vars *v);

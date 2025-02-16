@@ -72,6 +72,6 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 char	*get_next_line(int fd);
 int		ft_hextoi(const char *nptr);
-size_t	count_words(char const *s, char c);
+size_t	count_words(char const *s, char *charset);
 
 #endif
