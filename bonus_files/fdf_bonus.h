@@ -18,7 +18,7 @@
 # include <math.h>
 # include "../libft/libft.h"
 
-# define W_W 1920 / 2
+# define W_W 1920
 # define W_H 1020
 # define MAX_COLOR	0xff4400
 # define MIN_COLOR	0x00a2ff

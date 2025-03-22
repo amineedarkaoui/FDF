@@ -59,10 +59,10 @@ int	fill_pixel(t_map *map, char *row, int i, int j)
 
 	map->scale = 0;
 	pair = ft_split(row, ',');
-	map->v[i * map->w + j].x = j * 100;
-	map->v[i * map->w + j].yf = -ft_atoi(pair[0]) * 10;
+	map->v[i * map->w + j].x = j * 1000;
+	map->v[i * map->w + j].yf = -ft_atoi(pair[0]) * 100;
 	map->v[i * map->w + j].y = 0;
-	map->v[i * map->w + j].z = (map->h - i - 1) * 100;
+	map->v[i * map->w + j].z = (map->h - i - 1) * 1000;
 	if (pair[1])
 	{
 		ft_tolower(pair[1]);
@@ -107,7 +107,7 @@ void	read_map(char *filename, t_map *map)
 	v.fd = open(filename, O_RDONLY);
 	map->v = malloc(map->h * map->w * sizeof(t_point));
 	if (!map->v)
-		exit(1);
+	exit(1);
 	v.i = 0;
 	v.is_colored = 0;
 	while (v.i < map->h)
@@ -117,7 +117,7 @@ void	read_map(char *filename, t_map *map)
 		free(v.gnl);
 		v.j = -1;
 		while (++v.j < map->w)
-			v.is_colored += fill_pixel(map, v.row[v.j], v.i, v.j);
+		v.is_colored += fill_pixel(map, v.row[v.j], v.i, v.j);
 		free_split(&v.row);
 		v.i++;
 	}

@@ -117,12 +117,11 @@ int	animate_map(t_vars *v)
 		usleep(10000);
 	copy_array(v->map.v, v->map.w * v->map.h, v->v0);
 	map_center = get_map_center(*v);
-
-	translate_map(*v, -map_center.x, -map_center.yf, -map_center.yf, -map_center.z);
+	translate_map(*v, -map_center.x, 0, 0, -map_center.z);
 	rotate_y(*v, v->angles.y);
 	rotate_x(*v, v->angles.x);
 	rotate_z(*v, v->angles.z);
-	translate_map(*v, map_center.x, map_center.yf, map_center.yf, map_center.z);
+	translate_map(*v, map_center.x, 0, 0, map_center.z);
 	translate_map(*v, -map_center.x, -map_center.yf, -map_center.yf, 0);
 	if (v->perspective % 2 == 1)
 		perspective(*v);
