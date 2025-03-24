@@ -6,23 +6,23 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 13:33:58 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/16 16:47:57 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/24 11:58:50 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
-void	change_z(t_vars *v, int n)
-{
-	int	i;
+// void	change_z(t_vars *v, int n)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < v->map.w * v->map.h)
-	{
-		v->map.v[i].y *= n;
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (i < v->map.w * v->map.h)
+// 	{
+// 		v->map.v[i].y *= n;
+// 		i++;
+// 	}
+// }
 
 int	key_hook(int keycode, t_vars *v)
 {
@@ -52,16 +52,16 @@ int	key_hook(int keycode, t_vars *v)
 		v->t.x += 10;
 	if (keycode == 97)
 		v->t.x -= 10;
-	if (keycode == 91)
-		change_z(v, 0.9);
-	if (keycode == 93)
-		change_z(v, 1.1);
+	// if (keycode == 91)
+	// 	change_z(v, 0.9);
+	// if (keycode == 93)
+	// 	change_z(v, 1.1);
 	if (keycode == 112)
 		v->perspective++;
 	if (keycode == 114)
 	{
 		v->perspective = 0;
-		v->t = (t_point){0, 0, 0, 0, 0};
+		v->t = (t_point){0, 0, 0, 0};
 		v->angles = (t_angles){0.615472907, 0.785398, 0};
 		v->map.scale = 0;
 	}

@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:18:17 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/16 11:04:51 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/24 11:41:01 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ t_point	get_map_min(t_vars v)
 	int		i;
 
 	min.x = v.v0[0].x;
-	min.yf = v.v0[0].yf;
+	min.y = v.v0[0].y;
 	min.z = v.v0[0].z;
 	i = 0;
 	while (i < v.map.w * v.map.h)
 	{
 		min.x = min_int(min.x, v.v0[i].x);
-		min.yf = min_int(min.yf, v.v0[i].yf);
+		min.y = min_int(min.y, v.v0[i].y);
 		min.z = min_int(min.z, v.v0[i].z);
 		i++;
 	}
@@ -53,13 +53,13 @@ t_point	get_map_max(t_vars v)
 	int		i;
 
 	max.x = v.v0[0].x;
-	max.yf = v.v0[0].yf;
+	max.y = v.v0[0].y;
 	max.z = v.v0[0].z;
 	i = 0;
 	while (i < v.map.w * v.map.h)
 	{
 		max.x = max_int(max.x, v.v0[i].x);
-		max.yf = max_int(max.yf, v.v0[i].yf);
+		max.y = max_int(max.y, v.v0[i].y);
 		max.z = max_int(max.z, v.v0[i].z);
 		i++;
 	}
@@ -73,5 +73,5 @@ t_point	get_map_center(t_vars v)
 
 	min = get_map_min(v);
 	max = get_map_max(v);
-	return ((t_point){(max.x + min.x) / 2, 0, (max.yf + min.yf) / 2, (max.z + min.z) / 2, 0});
+	return ((t_point){(max.x + min.x) / 2, (max.y + min.y) / 2, (max.z + min.z) / 2, 0});
 }

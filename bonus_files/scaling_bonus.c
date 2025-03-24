@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:04:25 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/16 11:29:24 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/24 11:46:56 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ t_point	get_array_min(t_point *v, t_map map)
 
 	min.x = v[0].x;
 	min.y = v[0].y;
-	min.yf = v[0].yf;
+	min.y = v[0].y;
 	i = 0;
 	while (i < map.w * map.h)
 	{
 		min.x = min_int(min.x, v[i].x);
 		min.y = min_int(min.y, v[i].y);
-		min.yf = min_int(min.yf, v[i].yf);
+		min.y = min_int(min.y, v[i].y);
 		i++;
 	}
 	return (min);
@@ -52,13 +52,13 @@ t_point	get_array_max(t_point *v, t_map map)
 
 	max.x = v[0].x;
 	max.y = v[0].y;
-	max.yf = v[0].yf;
+	max.y = v[0].y;
 	i = 0;
 	while (i < map.w * map.h)
 	{
 		max.x = max_int(max.x, v[i].x);
 		max.y = max_int(max.y, v[i].y);
-		max.yf = max_int(max.yf, v[i].yf);
+		max.y = max_int(max.y, v[i].y);
 		i++;
 	}
 	return (max);
@@ -84,7 +84,7 @@ void	dynamic_scale(t_vars *v)
 		min = get_array_min(v->v0, v->map);
 		max = get_array_max(v->v0, v->map);
 		dx = max.x - min.x;
-		dy = max.yf - min.yf;
+		dy = max.y - min.y;
 		v->map.scale0 = min_double((0.8 * W_W) / dx, (0.8 * W_H) / dy);
 		if (v->map.w == 1 && v->map.h == 1)
 			v->map.scale0 = 1;

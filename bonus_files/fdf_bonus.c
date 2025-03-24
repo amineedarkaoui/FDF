@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:44:28 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/16 16:50:47 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/24 13:37:51 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,53 +81,24 @@ void	perspective(t_vars v)
 
 int	animate_map(t_vars *v)
 {
-	int	i;
-	int	sleep_flag = 0;
-	int	miny = 0;
-	int maxy = 0;
 	t_point	map_center;
 
+	// printf("looping\n");
 	ft_bzero(v->img.addr, v->img.ll * W_H);
-	i = 0;
-	while (i < v->map.w * v->map.h)
-	{
-		miny = min_int(miny, v->v0[i].yf);
-		maxy = max_int(maxy, v->v0[i].yf);
-		i++;
-	}
-	i = 0;
-	while (i < v->map.w * v->map.h)
-	{
-		if (v->map.v[i].y < v->map.v[i].yf)
-		{
-
-			v->map.v[i].y += max_int(maxy / 100, 1);
-			v->map.v[i].y = min_int(v->map.v[i].y, v->map.v[i].yf);
-			sleep_flag = 1;
-		}
-		else if (v->map.v[i].y > v->map.v[i].yf)
-		{
-			v->map.v[i].y += min_int(miny / 100, -1);
-			v->map.v[i].y = max_int(v->map.v[i].y, v->map.v[i].yf);
-			sleep_flag = 1;
-		}
-		i++;
-	}
-	if (sleep_flag)
-		usleep(10000);
 	copy_array(v->map.v, v->map.w * v->map.h, v->v0);
 	map_center = get_map_center(*v);
-	translate_map(*v, -map_center.x, 0, 0, -map_center.z);
+	translate_map(*v, map_center.x, map_center.y, map_center.z);
 	rotate_y(*v, v->angles.y);
 	rotate_x(*v, v->angles.x);
 	rotate_z(*v, v->angles.z);
-	translate_map(*v, map_center.x, 0, 0, map_center.z);
-	translate_map(*v, -map_center.x, -map_center.yf, -map_center.yf, 0);
+	map_center = get_map_center(*v);
+	translate_map(*v, map_center.x, map_center.y, map_center.z);
 	if (v->perspective % 2 == 1)
 		perspective(*v);
+	//translate_map(*v, map_center.x, map_center.yf, map_center.yf, 0);
 	dynamic_scale(v);
 	translate_center(*v);
-	translate_map(*v, v->t.x, v->t.y, v->t.y, 0);
+	translate_map(*v, v->t.x, v->t.y, 0);
 	draw_map(*v);
 	mlx_put_image_to_window(v->mlx, v->mlx_win, v->img.img, 0, 0);
 	return (0);
@@ -139,7 +110,7 @@ void	display_map(t_map map)
 
 	v.perspective = 0;
 	v.s_flag = 0;
-	v.t = (t_point){0, 0, 0, 0, 0};
+	v.t = (t_point){0, 0, 0, 0};
 	v.v0 = malloc(map.h * map.w * sizeof(t_point));
 	v.angles = (t_angles){0.615472907, 0.785398, 0};
 	v.map = map;
@@ -159,7 +130,7 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 	{
-		ft_putstr_fd("Invalid number of args!\n", 1);
+		ft_putstr_fd("Error: Invalid number of args!\n", 2);
 		return (1);
 	}
 	read_map(av[1], &map);

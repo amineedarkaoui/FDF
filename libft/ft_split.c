@@ -37,15 +37,21 @@ size_t	count_words(char const *s, char *charset)
 	while (s[i])
 	{
 		j = 0;
+		// printf("a");
 		while (s[i + j] && !is_char(s[i + j], charset))
+		{
+			// printf("b");
 			j++;
+		}
 		if (j > 0)
 		{
+			// printf("c");
 			count++;
 			i += j;
 		}
 		if (s[i])
 			i++;
+		// printf("d");
 	}
 	return (count);
 }
@@ -107,15 +113,3 @@ char	**ft_split(char const *s, char c)
 	result[len] = 0;
 	return (result);
 }
-
-// int main()
-// {
-// 	char **strs = ft_split("   hgah  dsfg g agsdh  ", ' ');
-// 	int i = 0;
-// 	while (strs[i])
-// 	{
-// 		printf("%s\n", strs[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }

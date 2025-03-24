@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 07:35:11 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/01/31 08:56:28 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/23 10:33:59 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <mlx.h>
 # include <stdio.h>
 # include <math.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 # define W_W 1920
 # define W_H 1020
