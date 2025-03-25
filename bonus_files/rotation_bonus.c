@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 19:48:19 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/24 11:32:55 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:51:41 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	rotate_y(t_vars v, double angle)
 	int	z;
 
 	i = 0;
-	while (i < v.map.w * v.map.h)
+	while (i < v.m.w * v.m.h)
 	{
 		x = cos(angle) * v.v0[i].x + sin(angle) * v.v0[i].z;
 		z = -sin(angle) * v.v0[i].x + cos(angle) * v.v0[i].z;
@@ -36,7 +36,7 @@ void	rotate_x(t_vars v, double angle)
 	int	z;
 
 	i = 0;
-	while (i < v.map.w * v.map.h)
+	while (i < v.m.w * v.m.h)
 	{
 		y = cos(angle) * v.v0[i].y - sin(angle) * v.v0[i].z;
 		z = sin(angle) * v.v0[i].y + cos(angle) * v.v0[i].z;
@@ -53,7 +53,7 @@ void	rotate_z(t_vars v, double angle)
 	int	y;
 
 	i = 0;
-	while (i < v.map.w * v.map.h)
+	while (i < v.m.w * v.m.h)
 	{
 		x = cos(angle) * v.v0[i].x - sin(angle) * v.v0[i].y;
 		y = sin(angle) * v.v0[i].x + cos(angle) * v.v0[i].y;

@@ -6,26 +6,11 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 07:34:56 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/02/15 21:51:42 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 12:39:36 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-void	free_split(char ***strs)
-{
-	int	i;
-
-	i = 0;
-	while (*strs && (*strs)[i])
-	{
-		free((*strs)[i]);
-		(*strs)[i] = NULL;
-		i++;
-	}
-	free(*strs);
-	*strs = NULL;
-}
 
 static void	count_map(char *filename, t_map *map)
 {
@@ -33,8 +18,6 @@ static void	count_map(char *filename, t_map *map)
 
 	vars.is_colored = 0;
 	vars.fd = open(filename, O_RDONLY);
-	if (vars.fd == -1)
-		exit(1);
 	map->h = 0;
 	while (1)
 	{
@@ -49,7 +32,10 @@ static void	count_map(char *filename, t_map *map)
 		map->h++;
 	}
 	if (!map->w || !map->h || vars.is_colored)
+	{
+		ft_putstr_fd("Error: Invalid map\n", 2);
 		exit(1);
+	}
 	close(vars.fd);
 }
 
@@ -59,9 +45,9 @@ int	fill_pixel(t_map *map, char *row, int i, int j)
 
 	map->scale = 0;
 	pair = ft_split(row, ',');
-	map->v[i * map->w + j].x = j * 100;
-	map->v[i * map->w + j].y = -ft_atoi(pair[0]) * 10;
-	map->v[i * map->w + j].z = (map->h - i - 1) * 100;
+	map->v[i * map->w + j].x = j * 1000;
+	map->v[i * map->w + j].y = -ft_atoi(pair[0]) * 100;
+	map->v[i * map->w + j].z = (map->h - i - 1) * 1000;
 	if (pair[1])
 	{
 		ft_tolower(pair[1]);
@@ -80,18 +66,7 @@ int	fill_pixel(t_map *map, char *row, int i, int j)
 void	color_map(t_map *map)
 {
 	int	i;
-	int	max;
-	int	min;
 
-	i = 0;
-	min = 0;
-	max = 0;
-	while (i < map->w * map->h)
-	{
-		min = min_int(min, map->v[i].y);
-		max = max_int(max, map->v[i].y);
-		i++;
-	}
 	i = 0;
 	while (i < map->w * map->h)
 	{
@@ -105,14 +80,38 @@ void	color_map(t_map *map)
 	}
 }
 
+void	check_map_name(char *filepath)
+{
+	char	**paths;
+	char	**parts;
+	char	*filename;
+	int		i;
+	int		fd;
+
+	fd = open(filepath, O_RDONLY);
+	paths = ft_split(filepath, '/');
+	filename = NULL;
+	i = -1;
+	while (paths[++i])
+		filename = paths[i];
+	parts = ft_split(filename, '.');
+	if (ft_strlen(filename) < 5 || ft_strncmp("fdf", parts[1], 3) || fd == -1)
+		i = -1;
+	free_split(&paths);
+	free_split(&parts);
+	close(fd);
+	if (i == -1)
+	{
+		ft_putstr_fd("Error: Invalid file name\n", 2);
+		exit(1);
+	}
+}
+
 void	read_map(char *filename, t_map *map)
 {
 	t_read_vars	v;
 
-	v.row = ft_split(filename, '.');
-	if (ft_strncmp(v.row[1], "fdf", 3))
-		exit(1);
-	free_split(&v.row);
+	check_map_name(filename);
 	count_map(filename, map);
 	v.fd = open(filename, O_RDONLY);
 	map->v = malloc(map->h * map->w * sizeof(t_point));

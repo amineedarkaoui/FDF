@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   translation_bonus.c                                :+:      :+:    :+:   */
+/*   projection_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 11:01:35 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/25 13:51:54 by aedarkao         ###   ########.fr       */
+/*   Created: 2025/03/25 13:01:39 by aedarkao          #+#    #+#             */
+/*   Updated: 2025/03/25 13:59:48 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
-void	translate_map(t_vars v, int x, int y, int z)
+void	perspective(t_vars v)
 {
-	int	i;
+	int		i;
+	double	a;
+	int		z;
+	int		min;
 
+	a = 393 / v.m.scale0;
+	min = get_map_min(v).z;
 	i = 0;
 	while (i < v.m.w * v.m.h)
 	{
-		v.v0[i].x += x;
-		v.v0[i].y += y;
-		v.v0[i].z += z;
+		if (min <= 0)
+			z = v.v0[i].z + 1 + abs(get_map_min(v).z);
+		else
+			z = v.v0[i].z;
+		if (v.v0[i].z != 0)
+		{
+			v.v0[i].x = (v.v0[i].x * a) / z;
+			v.v0[i].y = (v.v0[i].y * a) / z;
+		}
 		i++;
 	}
-}
-
-void	translate_center(t_vars *v)
-{
-	if (!v->s_flag)
-	{
-		v->center = get_map_center(*v);
-		v->s_flag = 1;
-	}
-	translate_map(*v, W_W / 2 - v->center.x, W_H / 2 - v->center.y, 0);
 }

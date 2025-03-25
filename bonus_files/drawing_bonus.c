@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:01:46 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/01/30 20:06:45 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:48:55 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,6 @@ void	my_pixel_put(t_img *data, int x, int y, int color)
 		dst = data->addr + (y * data->ll + x * (data->bpp / 8));
 		*(unsigned int *) dst = color;
 	}
-}
-
-int	is_greater(int a, int b)
-{
-	if (a > b)
-		return (1);
-	else
-		return (-1);
 }
 
 void	draw_l(t_img *img, t_point a, t_point b)
@@ -68,4 +60,41 @@ void	draw_l(t_img *img, t_point a, t_point b)
 		v.i++;
 	}
 	my_pixel_put(img, b.x, b.y, b.c);
+}
+
+void	draw_row(t_vars v, int x)
+{
+	int	y;
+
+	y = 0;
+	while (y < v.m.h)
+	{
+		if (y < v.m.h - 1 && x < v.m.w - 1)
+		{
+			draw_l(&v.img, v.v0[y * v.m.w + x], v.v0[y * v.m.w + x + 1]);
+			draw_l(&v.img, v.v0[y * v.m.w + x], v.v0[(y + 1) * v.m.w + x]);
+		}
+		else if (y < v.m.h - 1 || x < v.m.w - 1)
+		{
+			if (x == v.m.w - 1)
+				draw_l(&v.img, v.v0[y * v.m.w + x], v.v0[(y + 1) * v.m.w + x]);
+			if (y == v.m.h - 1)
+				draw_l(&v.img, v.v0[y * v.m.w + x], v.v0[y * v.m.w + x + 1]);
+		}
+		y++;
+	}
+}
+
+void	draw_map(t_vars v)
+{
+	int	x;
+
+	if (v.m.w == 1 && v.m.h == 1)
+		my_pixel_put(&v.img, v.v0[0].x, v.v0[0].y, v.v0->c);
+	x = 0;
+	while (x < v.m.w)
+	{
+		draw_row(v, x);
+		x++;
+	}
 }

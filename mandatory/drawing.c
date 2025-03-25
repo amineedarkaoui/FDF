@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:01:46 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/01/30 15:36:22 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 12:37:09 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,33 @@ void	draw_l(t_img *img, t_point a, t_point b)
 		v.i++;
 	}
 	my_pixel_put(img, b.x, b.y, b.c);
+}
+
+void	draw_map(t_img *img, t_map m)
+{
+	int	x;
+	int	y;
+
+	if (m.w == 1 && m.h == 1)
+		my_pixel_put(img, m.v[0].x, m.v[0].y, m.v->c);
+	x = -1;
+	while (++x < m.w)
+	{
+		y = -1;
+		while (++y < m.h)
+		{
+			if (y < m.h - 1 && x < m.w - 1)
+			{
+				draw_l(img, m.v[y * m.w + x], m.v[y * m.w + x + 1]);
+				draw_l(img, m.v[y * m.w + x], m.v[(y + 1) * m.w + x]);
+			}
+			else if (y < m.h - 1 || x < m.w - 1)
+			{
+				if (x == m.w - 1)
+					draw_l(img, m.v[y * m.w + x], m.v[(y + 1) * m.w + x]);
+				if (y == m.h - 1)
+					draw_l(img, m.v[y * m.w + x], m.v[y * m.w + x + 1]);
+			}
+		}
+	}
 }

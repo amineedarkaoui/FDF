@@ -1,37 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   translation_bonus.c                                :+:      :+:    :+:   */
+/*   freeing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 11:01:35 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/25 13:51:54 by aedarkao         ###   ########.fr       */
+/*   Created: 2025/03/25 13:22:55 by aedarkao          #+#    #+#             */
+/*   Updated: 2025/03/25 13:53:36 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
-void	translate_map(t_vars v, int x, int y, int z)
+void	free_split(char ***strs)
 {
 	int	i;
 
 	i = 0;
-	while (i < v.m.w * v.m.h)
+	while (*strs && (*strs)[i])
 	{
-		v.v0[i].x += x;
-		v.v0[i].y += y;
-		v.v0[i].z += z;
+		free((*strs)[i]);
+		(*strs)[i] = NULL;
 		i++;
 	}
+	free(*strs);
+	*strs = NULL;
 }
 
-void	translate_center(t_vars *v)
+void	clean_n_quit(t_vars *vars)
 {
-	if (!v->s_flag)
+	free(vars->m.v);
+	free(vars->v0);
+	if (vars->img.img)
+		mlx_destroy_image(vars->mlx, vars->img.img);
+	if (vars->mlx_win)
+		mlx_destroy_window(vars->mlx, vars->mlx_win);
+	if (vars->mlx)
 	{
-		v->center = get_map_center(*v);
-		v->s_flag = 1;
+		mlx_destroy_display(vars->mlx);
+		free(vars->mlx);
 	}
-	translate_map(*v, W_W / 2 - v->center.x, W_H / 2 - v->center.y, 0);
+	exit(0);
 }

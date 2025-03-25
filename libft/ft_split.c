@@ -100,7 +100,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (0);
-	len = count_words(s, (char[]){c, 0});
+	len = count_words(s, (char []){c, 0});
 	result = malloc((len + 1) * sizeof(char *));
 	if (result == 0)
 		return (0);

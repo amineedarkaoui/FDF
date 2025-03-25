@@ -6,26 +6,11 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:53:18 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/25 00:32:57 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:23:21 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
-
-void	free_split(char ***strs)
-{
-	int	i;
-
-	i = 0;
-	while (*strs && (*strs)[i])
-	{
-		free((*strs)[i]);
-		(*strs)[i] = NULL;
-		i++;
-	}
-	free(*strs);
-	*strs = NULL;
-}
 
 static void	count_map(char *filename, t_map *map)
 {
@@ -62,6 +47,7 @@ int	fill_pixel(t_map *map, char *row, int i, int j)
 	pair = ft_split(row, ',');
 	map->v[i * map->w + j].x = j * 1000;
 	map->v[i * map->w + j].y = -ft_atoi(pair[0]) * 100;
+	map->v[i * map->w + j].y0 = -ft_atoi(pair[0]) * 100;
 	map->v[i * map->w + j].z = (map->h - i - 1) * 1000;
 	if (pair[1])
 	{

@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 07:35:11 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/23 10:33:59 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:36:47 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 # define W_W 1920
 # define W_H 1020
-# define SCALE 5
 # define ISO_Y 0.785398
 # define ISO_X 0.615472907
 # define MAX_COLOR	0xff4400
@@ -98,5 +97,7 @@ void	dynamic_scale(t_map *map);
 int		key_hook(int keycode, t_vars *vars);
 int		button_hook(t_vars *vars);
 void	clean_n_quit(t_vars *vars);
+void	free_split(char ***strs);
+void	draw_map(t_img *img, t_map m);
 
 #endif

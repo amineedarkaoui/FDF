@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:44:40 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/25 01:58:52 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:49:15 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # define W_W 1920
 # define W_H 1020
+# define MATH_PI 3.14
 # define MAX_COLOR	0xff4400
 # define MIN_COLOR	0x00a2ff
 
@@ -36,6 +37,7 @@ typedef struct s_point {
 	int	y;
 	int	z;
 	int	c;
+	int	y0;
 }	t_point;
 
 typedef struct s_angles {
@@ -67,7 +69,7 @@ typedef struct s_vars
 	void		*mlx;
 	void		*mlx_win;
 	t_img		img;
-	t_map		map;
+	t_map		m;
 	t_angles	angles;
 	t_point		*v0;
 	t_point		t;
@@ -111,7 +113,11 @@ void	dynamic_scale(t_vars *v);
 int		key_hook(int keycode, t_vars *vars);
 int		button_hook(t_vars *vars);
 void	clean_n_quit(t_vars *vars);
+void	free_split(char ***strs);
 void	copy_array(t_point *array, int size, t_point *copy);
 int		show_map(t_vars *v);
+void	draw_map(t_vars v);
+void	perspective(t_vars v);
+int		is_greater(int a, int b);
 
 #endif
