@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:44:40 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/24 11:57:31 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 01:58:52 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_vars
 	t_angles	angles;
 	t_point		*v0;
 	t_point		t;
+	t_point		center;
 	int			s_flag;
 	double		offset;
 	int			perspective;
@@ -88,7 +89,7 @@ typedef struct s_read_vars
 }	t_read_vars;
 
 void	read_map(char *filename, t_map *map);
-void	translate_center(t_vars v);
+void	translate_center(t_vars *v);
 void	translate_map(t_vars v, int x, int y, int z);
 void	rotate_x(t_vars v, double angle);
 void	rotate_y(t_vars v, double angle);
@@ -111,5 +112,6 @@ int		key_hook(int keycode, t_vars *vars);
 int		button_hook(t_vars *vars);
 void	clean_n_quit(t_vars *vars);
 void	copy_array(t_point *array, int size, t_point *copy);
+int		show_map(t_vars *v);
 
 #endif

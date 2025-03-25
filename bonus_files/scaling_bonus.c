@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 13:04:25 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/24 11:46:56 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 02:15:27 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	dynamic_scale(t_vars *v)
 		v->map.scale0 = min_double((0.8 * W_W) / dx, (0.8 * W_H) / dy);
 		if (v->map.w == 1 && v->map.h == 1)
 			v->map.scale0 = 1;
-		v->s_flag = 1;
 	}
 	scale_map(v);
 }

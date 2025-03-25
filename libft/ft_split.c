@@ -37,21 +37,17 @@ size_t	count_words(char const *s, char *charset)
 	while (s[i])
 	{
 		j = 0;
-		// printf("a");
 		while (s[i + j] && !is_char(s[i + j], charset))
 		{
-			// printf("b");
 			j++;
 		}
 		if (j > 0)
 		{
-			// printf("c");
 			count++;
 			i += j;
 		}
 		if (s[i])
 			i++;
-		// printf("d");
 	}
 	return (count);
 }
@@ -104,7 +100,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (0);
-	len = count_words(s, (char[]){c});
+	len = count_words(s, (char[]){c, 0});
 	result = malloc((len + 1) * sizeof(char *));
 	if (result == 0)
 		return (0);

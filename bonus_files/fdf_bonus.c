@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:44:28 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/24 13:37:51 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 02:18:11 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,32 +72,32 @@ void	perspective(t_vars v)
 			z = v.v0[i].z;
 		if (v.v0[i].z != 0)
 		{
-			v.v0[i].x = (double)(v.v0[i].x * a) / z;
-			v.v0[i].y = (double)(v.v0[i].y * a) / z;
+			v.v0[i].x = (v.v0[i].x * a) / z;
+			v.v0[i].y = (v.v0[i].y * a) / z;
 		}
+
 		i++;
 	}
 }
 
-int	animate_map(t_vars *v)
+int	show_map(t_vars *v)
 {
 	t_point	map_center;
 
-	// printf("looping\n");
 	ft_bzero(v->img.addr, v->img.ll * W_H);
 	copy_array(v->map.v, v->map.w * v->map.h, v->v0);
 	map_center = get_map_center(*v);
-	translate_map(*v, map_center.x, map_center.y, map_center.z);
+	translate_map(*v, -map_center.x, -map_center.y, -map_center.z);
 	rotate_y(*v, v->angles.y);
 	rotate_x(*v, v->angles.x);
 	rotate_z(*v, v->angles.z);
-	map_center = get_map_center(*v);
 	translate_map(*v, map_center.x, map_center.y, map_center.z);
+	map_center = get_map_center(*v);
+	translate_map(*v, -map_center.x, -map_center.y, 0);
 	if (v->perspective % 2 == 1)
 		perspective(*v);
-	//translate_map(*v, map_center.x, map_center.yf, map_center.yf, 0);
 	dynamic_scale(v);
-	translate_center(*v);
+	translate_center(v);
 	translate_map(*v, v->t.x, v->t.y, 0);
 	draw_map(*v);
 	mlx_put_image_to_window(v->mlx, v->mlx_win, v->img.img, 0, 0);
@@ -120,7 +120,7 @@ void	display_map(t_map map)
 	v.img.addr = mlx_get_data_addr(v.img.img, &v.img.bpp, &v.img.ll, &v.img.e);
 	mlx_hook(v.mlx_win, 2, 1L << 0, key_hook, &v);
 	mlx_hook(v.mlx_win, 17, 0, button_hook, &v);
-	mlx_loop_hook(v.mlx, animate_map, &v);
+	mlx_loop_hook(v.mlx, show_map, &v);
 	mlx_loop(v.mlx);
 }
 

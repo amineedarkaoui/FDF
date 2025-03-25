@@ -6,7 +6,7 @@
 /*   By: aedarkao <aedarkao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:01:35 by aedarkao          #+#    #+#             */
-/*   Updated: 2025/03/24 11:58:09 by aedarkao         ###   ########.fr       */
+/*   Updated: 2025/03/25 02:15:13 by aedarkao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,12 @@ void	translate_map(t_vars v, int x, int y, int z)
 	}
 }
 
-void	translate_center(t_vars v)
+void	translate_center(t_vars *v)
 {
-	t_point	center;
-
-	center = get_map_center(v);
-	translate_map(v, W_W / 2 - center.x, W_H / 2 - center.y, 0);
+	if (!v->s_flag)
+	{
+		v->center = get_map_center(*v);
+		v->s_flag = 1;
+	}
+	translate_map(*v, W_W / 2 - v->center.x, W_H / 2 - v->center.y, 0);
 }
